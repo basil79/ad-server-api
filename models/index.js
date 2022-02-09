@@ -28,10 +28,8 @@ class AdServe {
   getJDBCClientConfig(config) {
     const jdbcConfig = config.jdbc;
     if(!jdbcConfig) {
-      console.log('mysql use default');
       return this.getJDBCDefaultClientConfig()
     }
-    console.log('mysql use config');
     return jdbcConfig;
   }
   getElasticDefaultClientConfig() {
@@ -44,7 +42,6 @@ class AdServe {
     if(!elasticConfig) {
       return this.getElasticDefaultClientConfig()
     }
-    console.log('elastic use config');
     return elasticConfig;
   }
   toString() {
