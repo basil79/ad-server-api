@@ -1,4 +1,4 @@
-public/
+dbscripts/
 !.eslintrc.js
 node_modules/
 test/

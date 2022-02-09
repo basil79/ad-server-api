@@ -1,62 +1,20 @@
 const mysql = require('mysql');
 const { Client } = require('@elastic/elasticsearch');
 const config = require('../config.json');
-
-class JDBCClient {
-  createShared(config) {
-    if(this.conn == undefined) {
-      this.conn = mysql.createConnection(config);
-      this.conn.connect((err) => {
-        if (err) {
-          console.log('Error connection to MySQL');
-          return;
-        }
-        console.log('Connection established');
-      });
-    }
-    return this;
-  }
-  getConnection(callback) {
-    if(callback != undefined
-      && typeof callback == 'function') {
-      callback(this.conn);
-    }
-  }
-  close() {
-    this.conn.end((err) => {
-      // The connection is terminated gracefully
-      // Ensure all previously enqueued are still
-      // before sending a COM_QUIT packet to the MySQL server
-    });
-  }
-}
-
-class JDBCRepository {
-  constructor(jdbcClient) {
-    this.jdbcClient = jdbcClient;
-  }
-  procedureQuery(procedureName, params, callback) {
-    let query = `CALL ${procedureName}(${params.map(() => '?')})`;
-    this.jdbcClient.getConnection(function(conn) {
-      // check conn
-      conn.query(query, params.map(param => param.value), (err, rows) => {
-        //if(err) throw err;
-        //console.log('Data received from MySQL\n');
-        if(callback != undefined
-          && typeof callback == 'function') {
-          callback(err, rows);
-        }
-      });
-
-    });
-  }
-}
+const {JDBCClient} = require('./jdbc');
+const SupplyTags = require('../services/supply-tags');
 
 class AdServe {
   constructor(config) {
     this.config = config;
+    // Clients
     this.jdbcClient = new JDBCClient();
     this.elasticClient = new Client(this.getElasticClientConfig(this.config));
+    // Services
+    this.supplyTagsService = new SupplyTags(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)), this.elasticClient);
+  }
+  supplyTags() {
+    return this.supplyTagsService;
   }
   getJDBCDefaultClientConfig() {
     return {
@@ -70,8 +28,10 @@ class AdServe {
   getJDBCClientConfig(config) {
     const jdbcConfig = config.jdbc;
     if(!jdbcConfig) {
+      console.log('mysql use default');
       return this.getJDBCDefaultClientConfig()
     }
+    console.log('mysql use config');
     return jdbcConfig;
   }
   getElasticDefaultClientConfig() {
@@ -84,6 +44,7 @@ class AdServe {
     if(!elasticConfig) {
       return this.getElasticDefaultClientConfig()
     }
+    console.log('elastic use config');
     return elasticConfig;
   }
   toString() {

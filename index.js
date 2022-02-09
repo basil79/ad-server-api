@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const supplyTagsRouter = require('./routes/supply-tags');
 
 const app = express();
 const port = normalizePort(process.env.PORT || '8083');
@@ -26,6 +27,7 @@ app.use(cors({
   credentials: true
 }));
 
+app.use('/supply-tags', supplyTagsRouter);
 app.get('/', (req, res) => {
   res.send('Hello World!')
 });
