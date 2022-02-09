@@ -16,14 +16,19 @@ class SupplyTags extends JDBCRepository {
     return new Promise((res, rej) => {
 
       this.procedureQuery('get_supply_tags', [
-        new SqlParam(this.ID, id)
+        new SqlParam(this.ID, id),
+        new SqlParam(this.FROM, null),
+        new SqlParam(this.SIZE, null),
+        new SqlParam(this.SORT_COLUMN, null),
+        new SqlParam(this.SORT_ORDER, null)
       ], function(err, rows) {
         if(err) {
           rej(err);
         }
 
         // Data
-        console.log(rows);
+        console.log(rows, rows[0].length);
+        res([]);
 
       });
 
