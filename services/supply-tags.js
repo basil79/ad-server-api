@@ -25,14 +25,13 @@ class SupplyTags extends JDBCRepository {
       ], function(err, rows) {
         if(err) {
           rej(err);
-        }
-
-        if(rows[0].length != 0) {
-          res(new SupplyTag(rows[0][0]));
         } else {
-          res(null);
+          if(rows[0].length != 0) {
+            res(new SupplyTag(rows[0][0]));
+          } else {
+            res(null);
+          }
         }
-
       });
     });
   }
@@ -47,16 +46,13 @@ class SupplyTags extends JDBCRepository {
       ], function (err, rows) {
         if(err) {
           rej(err);
-        }
-
-        if(rows[0].length != 0) {
-          const list = rows[0].map((row) => new SupplyTag(row));
-          const total = rows[1][0]['@row_num'];
-          res(new SupplyTagsResult(list, total));
         } else {
-          res(null);
+          if(rows.length == 3) {
+            res(new SupplyTagsResult(rows[0].map((row) => new SupplyTag(row)), rows[1][0]['@row_num']));
+          } else {
+            res(null);
+          }
         }
-
       });
     });
   }
