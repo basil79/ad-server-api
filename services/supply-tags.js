@@ -8,6 +8,8 @@ class SupplyTags extends JDBCRepository {
     this.elasticClient = elasticClient;
 
     this.ID = '$id';
+    this.NAME = '$name';
+    this.IS_ACTIVE = '$is_active';
     this.FROM = '$from';
     this.SIZE = '$size';
     this.SORT_COLUMN = '$sort_column';
@@ -52,6 +54,36 @@ class SupplyTags extends JDBCRepository {
           } else {
             res(null);
           }
+        }
+      });
+    });
+  }
+  set(id, name, isActive) {
+    return new Promise((res, rej) => {
+      this.procedureQuery('set_supply_tag', [
+        new SqlParam(this.ID, id),
+        new SqlParam(this.NAME, name),
+        new SqlParam(this.IS_ACTIVE, isActive)
+      ], function(err, rows) {
+        if(err) {
+          rej(err);
+        } else {
+          console.log(rows);
+          res(null);
+        }
+      });
+    });
+  }
+  delete(id) {
+    return new Promise((res, rej) => {
+      this.procedureQuery('delete_supply_tag', [
+        new SqlParam(this.ID, id)
+      ], function(err, rows) {
+        if(err) {
+          rej(err);
+        } else {
+          console.log(rows);
+          res(null);
         }
       });
     });
