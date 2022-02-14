@@ -3,6 +3,7 @@ const { Client } = require('@elastic/elasticsearch');
 const config = require('../config.json');
 const {JDBCClient} = require('./jdbc');
 const SupplyTags = require('../services/supply-tags');
+const Users = require('../services/users');
 
 class AdServe {
   constructor(config) {
@@ -11,7 +12,11 @@ class AdServe {
     this.jdbcClient = new JDBCClient();
     this.elasticClient = new Client(this.getElasticClientConfig(this.config));
     // Services
+    this.usersService = new Users(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)));
     this.supplyTagsService = new SupplyTags(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)), this.elasticClient);
+  }
+  users() {
+    return this.usersService;
   }
   supplyTags() {
     return this.supplyTagsService;

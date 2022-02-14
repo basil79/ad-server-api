@@ -1,7 +1,7 @@
 USE `adserve`;
 DROP PROCEDURE IF EXISTS `get_supply_tags`;
 CREATE PROCEDURE `get_supply_tags` (
-    $id bigint(20),
+    $id int(11),
     $from int,
     $size int,
     $sort_column varchar(50),

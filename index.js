@@ -1,5 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+
+const authRouter = require('./routes/auth');
+const usersRouter = require('./routes/users');
 const supplyTagsRouter = require('./routes/supply-tags');
 
 const app = express();
@@ -26,7 +29,16 @@ app.use(cors({
   optionsSuccessStatus: 200,
   credentials: true
 }));
-
+app.use(express.json());
+app.use((req, res, next) => {
+  res.header(
+    "Access-Control-Allow-Headers",
+    "x-access-token, Origin, Content-Type, Accept"
+  );
+  next();
+});
+app.use('/auth', authRouter);
+app.use('/users', usersRouter);
 app.use('/supply-tags', supplyTagsRouter);
 
 app.listen(port, () => {

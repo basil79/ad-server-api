@@ -8,5 +8,6 @@
   },
   "elastic": {
     "node": "http://localhost:9200"
-  }
+  },
+  "secret": "bezkoder-secret-key"
 }

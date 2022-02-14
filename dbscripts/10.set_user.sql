@@ -1,8 +1,10 @@
 USE `adserve`;
-DROP PROCEDURE IF EXISTS `set_supply_tag`;
-CREATE PROCEDURE `set_supply_tag` (
+DROP PROCEDURE IF EXISTS `set_user`;
+CREATE PROCEDURE `set_user` (
     $id int(11),
-    $name varchar(255),
+    $username varchar(255),
+    $email varchar(255),
+    $password varchar(255),
     $is_active tinyint(1)
 )
 BEGIN
@@ -13,24 +15,30 @@ BEGIN
         END;
     START TRANSACTION;
     IF (ISNULL($id)) THEN
-        INSERT INTO supply_tags (
+        INSERT INTO users (
             id,
-            name,
+            username,
+            email,
+            password,
             modify_date,
             is_active
         ) VALUES (
             $id,
-            $name,
+            $username,
+            $email,
+            $password,
             NOW(),
             IFNULL($is_active, 0)
         );
 
         SET $id = last_insert_id();
     ELSE
-        UPDATE supply_tags
+        UPDATE users
             SET
                 id = IFNULL($id, id),
-                name = IFNULL($name, name),
+                username = IFNULL($username, username),
+                email = IFNULL($email, email),
+                password = IFNULL($password, password),
                 modify_date = NOW(),
                 is_active = IFNULL($is_active, is_active)
             WHERE id = $id;

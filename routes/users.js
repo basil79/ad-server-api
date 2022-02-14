@@ -11,8 +11,8 @@ router.get('/', [verifyToken], (req, res) => {
   const sortOrder = req.query.sort_order;
 
   adserve
-    .supplyTags()
-    .getMany(null, from, size, sortColumn, sortOrder)
+    .users()
+    .getMany(null, null, null, null, from, size, sortColumn, sortOrder)
     .then(data => {
       res
         .json(data ? data : {});
@@ -25,12 +25,13 @@ router.get('/', [verifyToken], (req, res) => {
     });
 
 });
-router.get('/:id',[verifyToken], (req, res) => {
+
+router.get('/:id', [verifyToken], (req, res) => {
 
   const id = req.params.id;
 
   adserve
-    .supplyTags()
+    .users()
     .get(id)
     .then(data => {
       console.log(data);
