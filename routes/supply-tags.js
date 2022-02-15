@@ -3,6 +3,44 @@ const router = express.Router();
 const adserve = require('../models');
 const verifyToken = require('../controllers/jwt');
 
+
+router.post('/', [verifyToken], (req, res) => {
+
+  const id = req.body.id;
+  const name = req.body.name;
+  const isActive = req.body.isActive;
+
+  if(id || name) {
+    // Set/Update
+    adserve
+      .supplyTags()
+      .set(id, name, isActive)
+      .then(data => {
+        if(data) {
+          res.json({
+            id: data
+          });
+        } else {
+          res.json({
+            error: 'error'
+          });
+        }
+      })
+      .catch(err => {
+        res
+          .json({
+            error: err.message
+          });
+      });
+
+  } else {
+    res.json({
+      error: 'please provide id or name'
+    });
+  }
+
+});
+
 router.get('/', [verifyToken], (req, res) => {
 
   const from = req.query.from;

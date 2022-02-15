@@ -3,6 +3,12 @@ const router = express.Router();
 const adserve = require('../models');
 const verifyToken = require('../controllers/jwt');
 
+router.post('/', [verifyToken], (req, res) => {
+
+
+
+});
+
 router.get('/', [verifyToken], (req, res) => {
 
   const from = req.query.from;
