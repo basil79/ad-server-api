@@ -16,7 +16,7 @@ router.post('/register', (req, res) => {
     // Check for duplication username or email
     adserve
       .users()
-      .get(null, username, email, null)
+      .get(null, username, null, null)
       .then(user => {
         if(!user) {
           // Set
@@ -67,6 +67,13 @@ router.post('/login', (req, res) => {
     .get(null, username, null, null)
     .then(user => {
       if(user) {
+        // Check if user not active
+        if(!user.isActive) {
+          return res
+            .json({
+              error: 'user not active'
+            });
+        }
         // Validate password
         const passwordIsValid = bcrypt.compareSync(
           password,

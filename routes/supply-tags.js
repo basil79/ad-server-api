@@ -10,7 +10,7 @@ router.post('/', [verifyToken], (req, res) => {
   const name = req.body.name;
   const isActive = req.body.isActive;
 
-  if(id || name) {
+  if(id) {
     // Set/Update
     adserve
       .supplyTags()
