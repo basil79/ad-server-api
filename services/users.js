@@ -94,8 +94,11 @@ class Users extends JDBCRepository {
         if(err) {
           rej(err);
         } else {
-          console.log(rows);
-          res(null);
+          if(rows.length == 2) {
+            res(rows[0][0]['id']);
+          } else {
+            res(null);
+          }
         }
       });
     });
