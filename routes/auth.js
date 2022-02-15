@@ -11,8 +11,6 @@ router.post('/register', (req, res) => {
   const email = req.body.email;
   const password = bcrypt.hashSync(req.body.password, 8);
 
-  console.log(username, email, password);
-
   if(username && email && password) {
 
     // Check for duplication username or email
@@ -40,7 +38,7 @@ router.post('/register', (req, res) => {
         } else {
           res
             .json({
-              error: 'username or email already exists'
+              error: 'username already exists'
             });
         }
       })
@@ -81,12 +79,10 @@ router.post('/login', (req, res) => {
             })
         }
 
-        console.log('password correct !!!!!!!!');
         const token = jwt.sign({ id: user.id }, config.secret, {
           expiresIn: 86400 // 24 hours
         });
 
-        console.log(token);
         res
           .json({
             id: user.id,
