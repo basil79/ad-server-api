@@ -10,34 +10,26 @@ router.post('/', [verifyToken], (req, res) => {
   const name = req.body.name;
   const isActive = req.body.isActive;
 
-  if(id) {
-    // Set/Update
-    adserve
-      .supplyTags()
-      .set(id, name, isActive)
-      .then(data => {
-        if(data) {
-          res.json({
-            id: data
-          });
-        } else {
-          res.json({
-            error: 'error'
-          });
-        }
-      })
-      .catch(err => {
-        res
-          .json({
-            error: err.message
-          });
-      });
-
-  } else {
-    res.json({
-      error: 'please provide id or name'
+  adserve
+    .supplyTags()
+    .set(id, name, isActive)
+    .then(data => {
+      if(data) {
+        res.json({
+          id: data
+        });
+      } else {
+        res.json({
+          error: 'error'
+        });
+      }
+    })
+    .catch(err => {
+      res
+        .json({
+          error: err.message
+        });
     });
-  }
 
 });
 
@@ -63,6 +55,7 @@ router.get('/', [verifyToken], (req, res) => {
     });
 
 });
+
 router.get('/:id',[verifyToken], (req, res) => {
 
   const id = req.params.id;

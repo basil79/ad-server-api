@@ -26,10 +26,11 @@ class DemandTags extends JDBCRepository {
     this.SORT_ORDER = '$sort_order';
 
   }
-  get(id) {
+  get(id, supplyTagId) {
     return new Promise((res, rej) => {
       this.procedureQuery('get_demand_tags', [
         new SqlParam(this.ID, id),
+        new SqlParam(this.SUPPLY_TAG_ID, supplyTagId),
         new SqlParam(this.FROM, null),
         new SqlParam(this.SIZE, null),
         new SqlParam(this.SORT_COLUMN, null),
@@ -69,7 +70,7 @@ class DemandTags extends JDBCRepository {
       });
     });
   }
-  set(id, name, supplyTagId, vastUrl, bidder, tier, priority, cpm, floor, frequency, trackingEvents, timeout, isActive) {
+  set(id, name, supplyTagId, vastUrl, tier, priority, cpm, floor, timeout, isActive) {
     return new Promise((res, rej) => {
       this.procedureQuery('set_demand_tag', [
         new SqlParam(this.ID, id),
