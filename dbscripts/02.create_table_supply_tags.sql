@@ -1,10 +1,8 @@
 USE `adserve`;
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
+DROP TABLE IF EXISTS `supply_tags`;
+CREATE TABLE `supply_tags` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `username` varchar(255) NOT NULL,
-    `email` varchar(255) NOT NULL,
-    `password` varchar(255) NOT NULL,
+    `name` varchar(255) NOT NULL,
     `insert_date` datetime NOT NULL DEFAULT now(),
     `modify_date` datetime DEFAULT NULL,
     `is_active` tinyint(1) DEFAULT NULL,

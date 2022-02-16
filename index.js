@@ -4,6 +4,7 @@ const cors = require('cors');
 const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
 const supplyTagsRouter = require('./routes/supply-tags');
+const demandTagsRouter = require('./routes/demand-tags');
 
 const app = express();
 const port = normalizePort(process.env.PORT || '8083');
@@ -40,6 +41,7 @@ app.use((req, res, next) => {
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use('/supply-tags', supplyTagsRouter);
+app.use('/demand-tags', demandTagsRouter);
 
 app.listen(port, () => {
   console.log(`listening on port ${port}!`)
