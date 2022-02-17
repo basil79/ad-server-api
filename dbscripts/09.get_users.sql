@@ -4,7 +4,6 @@ CREATE PROCEDURE `get_users` (
     $id int(11),
     $username varchar(255),
     $email varchar(255),
-    $password varchar(255),
     $from int,
     $size int,
     $sort_column varchar(50),
@@ -23,6 +22,8 @@ BEGIN
         u.username,
         u.email,
         u.password,
+        u.two_factor_authentication,
+        u.two_factor_authentication_secret,
         u.insert_date,
         u.modify_date,
         u.is_active
@@ -31,7 +32,6 @@ BEGIN
         AND u.id = IFNULL($id, u.id)
         AND u.username = IFNULL($username, u.username)
         AND u.email = IFNULL($email, u.email)
-        AND u.password = IFNULL($password, u.password)
     ORDER BY
     CASE
         WHEN @sort_order <> 'ASC' THEN 0
@@ -44,6 +44,10 @@ BEGIN
     CASE
         WHEN @sort_order <> 'ASC' THEN ''
         WHEN @sort_column = 'email' THEN u.email
+    END ASC,
+    CASE
+        WHEN @sort_order <> 'ASC' THEN 0
+        WHEN @sort_column = 'two_factor_authentication' THEN u.two_factor_authentication
     END ASC,
     CASE
         WHEN @sort_order <> 'ASC' THEN CAST(NULL AS DATE)
@@ -68,6 +72,10 @@ BEGIN
     CASE
         WHEN @sort_order <> 'DESC' THEN ''
         WHEN @sort_column = 'email' THEN u.email
+    END DESC,
+    CASE
+        WHEN @sort_order <> 'DESC' THEN 0
+        WHEN @sort_column = 'two_factor_authentication' THEN u.two_factor_authentication
     END DESC,
     CASE
         WHEN @sort_order <> 'DESC' THEN CAST(NULL AS DATE)

@@ -12,36 +12,51 @@ router.post('/register', (req, res) => {
   const username = req.body.username;
   const email = req.body.email;
   const password = bcrypt.hashSync(req.body.password, 8);
-  const useTwoFactorAuthentication = req.body.use_two_factor_authentication;
+  const twoFactorAuthentication = Boolean(req.body.twoFactorAuthentication);
+
+  // 2FA
+  let secret = null;
 
   if(username && email && password) {
 
     // Check for duplication username or email
     adserve
       .users()
-      .get(null, username, null, null)
+      .get(null, username, null)
       .then(user => {
         if(!user) {
 
-          // TODO:
+          // Check if user enabled for 2FA
+          if(twoFactorAuthentication) {
+            // 2FA generate secret
+            secret = speakeasy.generateSecret({
+              name: 'AdServe'
+            });
+          }
+
           // Set
           adserve
             .users()
-            .set(null, username, email, password, 1)
+            .set(null, username, email, password, twoFactorAuthentication, (secret ? secret.base32 : null), 1)
             .then(data => {
 
-              // TODO: check if user enabled for 2FA
-              // 2FA
-              var secret = speakeasy.generateSecret({
-                name: 'AdServe'
-              });
+              // Check if 2FA secret exists
+              if(secret) {
 
-              res
-                .json({
-                  id: data,
-                  otpauthUrl: secret.otpauth_url,
-                  base32: secret.base32 // TODO: store to user
-                });
+                res
+                  .json({
+                    id: data,
+                    otpauthUrl: secret.otpauth_url,
+                    base32: secret.base32
+                  });
+
+              } else {
+
+                res
+                  .json({
+                    id: data
+                  });
+              }
 
             })
             .catch(err => {
@@ -76,10 +91,11 @@ router.post('/login', (req, res) => {
 
   const username = req.body.username;
   const password = req.body.password;
+  const twoFactorToken = req.body.token;
 
   adserve
     .users()
-    .get(null, username, null, null)
+    .get(null, username, null)
     .then(user => {
       if(user) {
         // Check if user not active
@@ -89,6 +105,7 @@ router.post('/login', (req, res) => {
               error: 'user not active'
             });
         }
+
         // Validate password
         const passwordIsValid = bcrypt.compareSync(
           password,
@@ -99,6 +116,31 @@ router.post('/login', (req, res) => {
             .json({
               error: 'invalid password'
             })
+        }
+
+        // Check if user has 2FA
+        if(user.twoFactorAuthentication) {
+          if(!twoFactorToken) {
+            return res
+              .json({
+                error: 'please provide 2fA token'
+              });
+          }
+
+          // Validate 2FA token
+          const tokenValidates = speakeasy.totp.verify({
+            secret: user.twoFactorAuthenticationSecret,
+            encoding: 'base32',
+            token: twoFactorToken,
+          });
+
+          if(!tokenValidates) {
+            return res
+              .json({
+                error: '2FA token invalid'
+              });
+          }
+
         }
 
         const token = jwt.sign({ id: user.id }, config.secret, {
@@ -133,7 +175,7 @@ router.post('/login', (req, res) => {
 // 2 two-factor authentication
 router.post('/2fa/generate', (req, res) => {
 
-  const otpauthUrl = req.body.otpauth_url
+  const otpauthUrl = req.body.otpauthUrl;
 
   if(otpauthUrl) {
     // otpauth://totp/AdServe?secret=OM4DKTSWH5DTAVBTIQ7GWQDBM5FSG6DFNNKSSV2FNRWE4ZB4J55A
@@ -154,7 +196,7 @@ router.post('/2fa/generate', (req, res) => {
 
 router.post('/2fa/verify', (req, res) => {
 
-  const token = req.body.token;
+  const token = req.body.token; // 123456
   const secret = req.body.secret; // TODO: get from user
 
   if(token) {

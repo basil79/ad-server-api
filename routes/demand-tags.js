@@ -7,8 +7,8 @@ router.post('/', [verifyToken], (req, res) => {
 
   const id = req.body.id;
   const name = req.body.name;
-  const supplyTagId = req.body.supply_tag_id;
-  const vastUrl = req.body.vast_url;
+  const supplyTagId = req.body.supplyTagId;
+  const vastUrl = req.body.vastUrl;
   const tier = req.body.tier;
   const priority = req.body.priority;
   const cpm = req.body.cpm;

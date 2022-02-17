@@ -10,6 +10,8 @@ class Users extends JDBCRepository {
     this.USERNAME = '$username';
     this.EMAIL = '$email';
     this.PASSWORD = '$password';
+    this.TWO_FACTOR_AUTHENTICATION = '$two_factor_authentication';
+    this.TWO_FACTOR_AUTHENTICATION_SECRET = '$two_factor_authentication_secret';
     this.IS_ACTIVE = '$is_active';
     this.FROM = '$from';
     this.SIZE = '$size';
@@ -17,13 +19,12 @@ class Users extends JDBCRepository {
     this.SORT_ORDER = '$sort_order';
 
   }
-  get(id, username, email, password) {
+  get(id, username, email) {
     return new Promise((res, rej) => {
       this.procedureQuery('get_users', [
         new SqlParam(this.ID, id),
         new SqlParam(this.USERNAME, username),
         new SqlParam(this.EMAIL, email),
-        new SqlParam(this.PASSWORD, password),
         new SqlParam(this.FROM, null),
         new SqlParam(this.SIZE, null),
         new SqlParam(this.SORT_COLUMN, null),
@@ -41,13 +42,12 @@ class Users extends JDBCRepository {
       });
     });
   }
-  getMany(id, username, email, password, from, size, sortColumn, sortOrder) {
+  getMany(id, username, email, from, size, sortColumn, sortOrder) {
     return new Promise((res, rej) => {
       this.procedureQuery('get_users', [
         new SqlParam(this.ID, id),
         new SqlParam(this.USERNAME, username),
         new SqlParam(this.EMAIL, email),
-        new SqlParam(this.PASSWORD, password),
         new SqlParam(this.FROM, from),
         new SqlParam(this.SIZE, size),
         new SqlParam(this.SORT_COLUMN, sortColumn),
@@ -65,13 +65,15 @@ class Users extends JDBCRepository {
       });
     });
   }
-  set(id, username, email, password, isActive) {
+  set(id, username, email, password, twoFactorAuthentication, twoFactorAuthenticationSecret, isActive) {
     return new Promise((res, rej) => {
       this.procedureQuery('set_user', [
         new SqlParam(this.ID, id),
         new SqlParam(this.USERNAME, username),
         new SqlParam(this.EMAIL, email),
         new SqlParam(this.PASSWORD, password),
+        new SqlParam(this.TWO_FACTOR_AUTHENTICATION, twoFactorAuthentication),
+        new SqlParam(this.TWO_FACTOR_AUTHENTICATION_SECRET, twoFactorAuthenticationSecret),
         new SqlParam(this.IS_ACTIVE, isActive)
       ], function(err, rows) {
         if(err) {

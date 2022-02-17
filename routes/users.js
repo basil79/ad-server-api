@@ -49,7 +49,7 @@ router.get('/', [verifyToken], (req, res) => {
 
   adserve
     .users()
-    .getMany(null, null, null, null, from, size, sortColumn, sortOrder)
+    .getMany(null, null, null, from, size, sortColumn, sortOrder)
     .then(data => {
       res
         .json(data ? data : {});

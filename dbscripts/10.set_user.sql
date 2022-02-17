@@ -5,6 +5,8 @@ CREATE PROCEDURE `set_user` (
     $username varchar(255),
     $email varchar(255),
     $password varchar(255),
+    $two_factor_authentication tinyint(1),
+    $two_factor_authentication_secret varchar(255),
     $is_active tinyint(1)
 )
 BEGIN
@@ -20,6 +22,8 @@ BEGIN
             username,
             email,
             password,
+            two_factor_authentication,
+            two_factor_authentication_secret,
             modify_date,
             is_active
         ) VALUES (
@@ -27,6 +31,8 @@ BEGIN
             $username,
             $email,
             $password,
+            $two_factor_authentication,
+            $two_factor_authentication_secret,
             NOW(),
             IFNULL($is_active, 0)
         );
@@ -39,6 +45,8 @@ BEGIN
                 username = IFNULL($username, username),
                 email = IFNULL($email, email),
                 password = IFNULL($password, password),
+                two_factor_authentication = IFNULL($two_factor_authentication, two_factor_authentication),
+                two_factor_authentication_secret = IFNULL($two_factor_authentication_secret, two_factor_authentication_secret),
                 modify_date = NOW(),
                 is_active = IFNULL($is_active, is_active)
             WHERE id = $id;
