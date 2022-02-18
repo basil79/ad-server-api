@@ -10,5 +10,10 @@
     "node": "http://localhost:9200"
   },
   "secret": "bezkoder-secret-key",
-  "expiresIn": 43200
+  "expiresIn": 43200,
+  "nodemailer": {
+    "service": "gmail",
+    "user": "",
+    "password": ""
+  }
 }
