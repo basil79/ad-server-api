@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
@@ -30,7 +31,11 @@ app.use(cors({
   optionsSuccessStatus: 200,
   credentials: true
 }));
+app.use(cookieParser());
+// parse requests of content-type - application/json
 app.use(express.json());
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   res.header(
     "Access-Control-Allow-Headers",

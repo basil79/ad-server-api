@@ -35,6 +35,8 @@ router.post('/', [verifyToken], (req, res) => {
 
 router.get('/', [verifyToken], (req, res) => {
 
+  console.log(req.userId);
+
   const from = req.query.from;
   const size = req.query.size;
   const sortColumn = req.query.sort_column;
