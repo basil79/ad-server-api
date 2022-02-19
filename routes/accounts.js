@@ -3,36 +3,6 @@ const router = express.Router();
 const adserve = require('../models');
 const verifyToken = require('../controllers/jwt');
 
-
-router.post('/', [verifyToken], (req, res) => {
-
-  const id = req.body.id;
-  const name = req.body.name;
-  const isActive = req.body.isActive;
-
-  adserve
-    .supplyTags()
-    .set(id, name, isActive)
-    .then(data => {
-      if(data) {
-        res.json({
-          id: data
-        });
-      } else {
-        res.json({
-          error: 'error'
-        });
-      }
-    })
-    .catch(err => {
-      res
-        .json({
-          error: err.message
-        });
-    });
-
-});
-
 router.get('/', [verifyToken], (req, res) => {
 
   const from = req.query.from;
@@ -41,7 +11,7 @@ router.get('/', [verifyToken], (req, res) => {
   const sortOrder = req.query.sort_order;
 
   adserve
-    .supplyTags()
+    .accounts()
     .getMany(null, from, size, sortColumn, sortOrder)
     .then(data => {
       res
@@ -56,12 +26,12 @@ router.get('/', [verifyToken], (req, res) => {
 
 });
 
-router.get('/:id',[verifyToken], (req, res) => {
+router.get('/:id', [verifyToken], (req, res) => {
 
   const id = req.params.id;
 
   adserve
-    .supplyTags()
+    .accounts()
     .get(id)
     .then(data => {
       console.log(data);
@@ -76,5 +46,6 @@ router.get('/:id',[verifyToken], (req, res) => {
     });
 
 });
+
 
 module.exports = router;

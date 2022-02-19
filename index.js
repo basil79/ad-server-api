@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 
 const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
+const accountsRouter = require('./routes/accounts');
 const supplyTagsRouter = require('./routes/supply-tags');
 const demandTagsRouter = require('./routes/demand-tags');
 
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 });
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
+app.use('/accounts', accountsRouter);
 app.use('/supply-tags', supplyTagsRouter);
 app.use('/demand-tags', demandTagsRouter);
 
