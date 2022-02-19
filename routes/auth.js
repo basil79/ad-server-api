@@ -5,7 +5,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('../config.json');
 const speakeasy = require('speakeasy');
-const QRCode = require("qrcode");
+const QRCode = require('qrcode');
+const verifyToken = require('../controllers/jwt');
 
 router.post('/register', (req, res) => {
 
@@ -101,6 +102,7 @@ router.post('/login', (req, res) => {
         // Check if user not active
         if(!user.isActive) {
           return res
+            .status(500)
             .json({
               error: 'user not active'
             });
@@ -113,6 +115,7 @@ router.post('/login', (req, res) => {
         );
         if (!passwordIsValid) {
           return res
+            .status(500)
             .json({
               error: 'invalid password'
             })
@@ -122,6 +125,7 @@ router.post('/login', (req, res) => {
         if(user.twoFactorAuthentication) {
           if(!twoFactorToken) {
             return res
+              .status(500)
               .json({
                 error: 'please provide 2fA token'
               });
@@ -136,6 +140,7 @@ router.post('/login', (req, res) => {
 
           if(!tokenValidates) {
             return res
+              .status(500)
               .json({
                 error: '2FA token invalid'
               });
@@ -147,7 +152,16 @@ router.post('/login', (req, res) => {
           expiresIn: config.expiresIn // 43200 sec - 12 hours, 86400 sec - 24 hours
         });
 
+        // Store token in cookies
+        let options = {
+          //path:"/",
+          //sameSite:true,
+          maxAge: 1000 * 60 * 60 * Math.floor(config.expiresIn / (60*60)), // would expire after 12 hours
+          httpOnly: false // true, The cookie only accessible by the web server
+        }
+
         res
+          .cookie('x-access-token', token, options)
           .json({
             id: user.id,
             username: user.username,
@@ -158,6 +172,7 @@ router.post('/login', (req, res) => {
       } else {
         // User not found
         res
+          .status(500)
           .json({
             error: 'user not found'
           });
@@ -165,10 +180,21 @@ router.post('/login', (req, res) => {
     })
     .catch(err => {
       res
+        .status(500)
         .json({
           error: err.message
         });
     });
+
+});
+
+// logout
+router.post('/logout', [verifyToken], (req, res) => {
+
+  console.log('logout');
+  res
+    .clearCookie('x-access-token')
+    .json({});
 
 });
 
