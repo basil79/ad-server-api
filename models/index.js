@@ -5,6 +5,8 @@ const {JDBCClient} = require('./jdbc');
 const SupplyTags = require('../services/supply-tags');
 const Users = require('../services/users');
 const DemandTags = require('../services/demand-tags');
+const Accounts = require('../services/accounts');
+const UserAccounts = require('../services/user-accounts');
 
 class AdServe {
   constructor(config) {
@@ -14,11 +16,19 @@ class AdServe {
     this.elasticClient = new Client(this.getElasticClientConfig(this.config));
     // Services
     this.usersService = new Users(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)));
+    this.accountsService = new Accounts(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)));
+    this.userAccountsService = new UserAccounts(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)));
     this.supplyTagsService = new SupplyTags(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)), this.elasticClient);
     this.demandTagsService = new DemandTags(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)), this.elasticClient);
   }
   users() {
     return this.usersService;
+  }
+  accounts() {
+    return this.accountsService;
+  }
+  userAccounts() {
+    return this.userAccountsService;
   }
   supplyTags() {
     return this.supplyTagsService;

@@ -1,8 +1,7 @@
 USE `adserve`;
-DROP PROCEDURE IF EXISTS `get_supply_tags`;
-CREATE PROCEDURE `get_supply_tags` (
+DROP PROCEDURE IF EXISTS `get_accounts`;
+CREATE PROCEDURE `get_accounts` (
     $id int(11),
-    $account_id int(11),
     $from int,
     $size int,
     $sort_column varchar(50),
@@ -17,64 +16,54 @@ BEGIN
 
     SELECT
         SQL_CALC_FOUND_ROWS
-        s.id,
-        s.name,
-        s.account_id,
-        s.insert_date,
-        s.modify_date,
-        s.is_active
-    FROM supply_tags s
+        a.id,
+        a.name,
+        a.insert_date,
+        a.modify_date,
+        a.is_active
+    FROM accounts a
     WHERE 1 = 1
-        AND s.id = IFNULL($id, s.id)
-        AND s.account_id <=> IFNULL($account_id, s.account_id)
+        AND a.id = IFNULL($id, a.id)
     ORDER BY
     CASE
         WHEN @sort_order <> 'ASC' THEN 0
-        WHEN @sort_column = 'id' THEN s.id
+        WHEN @sort_column = 'id' THEN a.id
     END ASC,
     CASE
         WHEN @sort_order <> 'ASC' THEN ''
-        WHEN @sort_column = 'name' THEN s.name
-    END ASC,
-    CASE
-        WHEN @sort_order <> 'ASC' THEN 0
-        WHEN @sort_column = 'account_id' THEN s.account_id
+        WHEN @sort_column = 'name' THEN a.name
     END ASC,
     CASE
         WHEN @sort_order <> 'ASC' THEN CAST(NULL AS DATE)
-        WHEN @sort_column = 'insert_date' THEN s.insert_date
+        WHEN @sort_column = 'insert_date' THEN a.insert_date
     END ASC,
     CASE
         WHEN @sort_order <> 'ASC' THEN CAST(NULL AS DATE)
-        WHEN @sort_column = 'modify_date' THEN s.modify_date
+        WHEN @sort_column = 'modify_date' THEN a.modify_date
     END ASC,
     CASE
         WHEN @sort_order <> 'ASC' THEN 0
-        WHEN @sort_column = 'is_active' THEN s.is_active
+        WHEN @sort_column = 'is_active' THEN a.is_active
     END ASC,
     CASE
         WHEN @sort_order <> 'DESC' THEN 0
-        WHEN @sort_column = 'id' THEN s.id
+        WHEN @sort_column = 'id' THEN a.id
     END DESC,
     CASE
         WHEN @sort_order <> 'DESC' THEN ''
-        WHEN @sort_column = 'name' THEN s.name
-    END DESC,
-    CASE
-        WHEN @sort_order <> 'DESC' THEN 0
-        WHEN @sort_column = 'account_id' THEN s.account_id
+        WHEN @sort_column = 'name' THEN a.name
     END DESC,
     CASE
         WHEN @sort_order <> 'DESC' THEN CAST(NULL AS DATE)
-        WHEN @sort_column = 'insert_date' THEN s.insert_date
+        WHEN @sort_column = 'insert_date' THEN a.insert_date
     END DESC,
     CASE
         WHEN @sort_order <> 'DESC' THEN CAST(NULL AS DATE)
-        WHEN @sort_column = 'modify_date' THEN s.modify_date
+        WHEN @sort_column = 'modify_date' THEN a.modify_date
     END DESC,
     CASE
         WHEN @sort_order <> 'DESC' THEN 0
-        WHEN @sort_column = 'is_active' THEN s.is_active
+        WHEN @sort_column = 'is_active' THEN a.is_active
     END DESC
   LIMIT $from, $size;
   SET @row_num = FOUND_ROWS();

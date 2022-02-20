@@ -1,15 +1,13 @@
-const { JDBCRepository, SqlParam } = require('../models/jdbc');
-const SupplyTag = require('../models/supply-tag');
-const SupplyTagsResult = require('../models/supply-tags-result');
+const { JDBCRepository, SqlParam} = require('../models/jdbc');
+const Account = require('../models/account');
+const AccountsResult = require('../models/accounts-result');
 
-class SupplyTags extends JDBCRepository {
-  constructor(jdbcClient, elasticClient) {
+class Accounts extends JDBCRepository{
+  constructor(jdbcClient) {
     super(jdbcClient);
-    this.elasticClient = elasticClient;
 
     this.ID = '$id';
     this.NAME = '$name';
-    this.ACCOUNT_ID = '$account_id';
     this.IS_ACTIVE = '$is_active';
     this.FROM = '$from';
     this.SIZE = '$size';
@@ -17,11 +15,10 @@ class SupplyTags extends JDBCRepository {
     this.SORT_ORDER = '$sort_order';
 
   }
-  get(id, accountId) {
+  get(id) {
     return new Promise((res, rej) => {
-      this.procedureQuery('get_supply_tags', [
+      this.procedureQuery('get_accounts', [
         new SqlParam(this.ID, id),
-        new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.FROM, null),
         new SqlParam(this.SIZE, null),
         new SqlParam(this.SORT_COLUMN, null),
@@ -31,7 +28,7 @@ class SupplyTags extends JDBCRepository {
           rej(err);
         } else {
           if(rows[0].length != 0) {
-            res(new SupplyTag(rows[0][0]));
+            res(new Account(rows[0][0]));
           } else {
             res(null);
           }
@@ -39,11 +36,10 @@ class SupplyTags extends JDBCRepository {
       });
     });
   }
-  getMany(id, accountId, from, size, sortColumn, sortOrder) {
+  getMany(id, from, size, sortColumn, sortOrder) {
     return new Promise((res, rej) => {
-      this.procedureQuery('get_supply_tags', [
+      this.procedureQuery('get_accounts', [
         new SqlParam(this.ID, id),
-        new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.FROM, from),
         new SqlParam(this.SIZE, size),
         new SqlParam(this.SORT_COLUMN, sortColumn),
@@ -53,7 +49,7 @@ class SupplyTags extends JDBCRepository {
           rej(err);
         } else {
           if(rows.length == 3) {
-            res(new SupplyTagsResult(rows[0].map((row) => new SupplyTag(row)), rows[1][0]['@row_num']));
+            res(new AccountsResult(rows[0].map((row) => new Account(row)), rows[1][0]['@row_num']));
           } else {
             res(null);
           }
@@ -61,12 +57,11 @@ class SupplyTags extends JDBCRepository {
       });
     });
   }
-  set(id, name, accountId, isActive) {
+  set(id, name, isActive) {
     return new Promise((res, rej) => {
-      this.procedureQuery('set_supply_tag', [
+      this.procedureQuery('set_account', [
         new SqlParam(this.ID, id),
         new SqlParam(this.NAME, name),
-        new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.IS_ACTIVE, isActive)
       ], function(err, rows) {
         if(err) {
@@ -83,7 +78,7 @@ class SupplyTags extends JDBCRepository {
   }
   delete(id) {
     return new Promise((res, rej) => {
-      this.procedureQuery('delete_supply_tag', [
+      this.procedureQuery('delete_account', [
         new SqlParam(this.ID, id)
       ], function(err, rows) {
         if(err) {
@@ -100,4 +95,5 @@ class SupplyTags extends JDBCRepository {
   }
 }
 
-module.exports = SupplyTags;
+
+module.exports = Accounts;

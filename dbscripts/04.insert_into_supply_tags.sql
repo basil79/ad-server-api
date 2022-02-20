@@ -1,2 +1,2 @@
 USE `adserve`;
-INSERT INTO supply_tags (id, name, is_active) VALUES (2, 'test2', 1);
+INSERT INTO supply_tags (name, account_id, is_active) VALUES (1, 'test1', 1, 1);
