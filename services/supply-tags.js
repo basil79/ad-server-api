@@ -9,6 +9,7 @@ class SupplyTags extends JDBCRepository {
 
     this.ID = '$id';
     this.NAME = '$name';
+    this.ACCOUNT_ID = '$account_id';
     this.IS_ACTIVE = '$is_active';
     this.FROM = '$from';
     this.SIZE = '$size';
@@ -16,10 +17,11 @@ class SupplyTags extends JDBCRepository {
     this.SORT_ORDER = '$sort_order';
 
   }
-  get(id) {
+  get(id, accountId) {
     return new Promise((res, rej) => {
       this.procedureQuery('get_supply_tags', [
         new SqlParam(this.ID, id),
+        new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.FROM, null),
         new SqlParam(this.SIZE, null),
         new SqlParam(this.SORT_COLUMN, null),
@@ -37,10 +39,11 @@ class SupplyTags extends JDBCRepository {
       });
     });
   }
-  getMany(id, from, size, sortColumn, sortOrder) {
+  getMany(id, accountId, from, size, sortColumn, sortOrder) {
     return new Promise((res, rej) => {
       this.procedureQuery('get_supply_tags', [
         new SqlParam(this.ID, id),
+        new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.FROM, from),
         new SqlParam(this.SIZE, size),
         new SqlParam(this.SORT_COLUMN, sortColumn),
@@ -58,11 +61,12 @@ class SupplyTags extends JDBCRepository {
       });
     });
   }
-  set(id, name, isActive) {
+  set(id, name, accountId, isActive) {
     return new Promise((res, rej) => {
       this.procedureQuery('set_supply_tag', [
         new SqlParam(this.ID, id),
         new SqlParam(this.NAME, name),
+        new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.IS_ACTIVE, isActive)
       ], function(err, rows) {
         if(err) {

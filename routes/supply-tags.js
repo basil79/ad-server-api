@@ -8,11 +8,12 @@ router.post('/', [verifyToken], (req, res) => {
 
   const id = req.body.id;
   const name = req.body.name;
+  const accountId = req.body.accountId;
   const isActive = req.body.isActive;
 
   adserve
     .supplyTags()
-    .set(id, name, isActive)
+    .set(id, name, accountId, isActive)
     .then(data => {
       if(data) {
         res.json({
@@ -35,6 +36,8 @@ router.post('/', [verifyToken], (req, res) => {
 
 router.get('/', [verifyToken], (req, res) => {
 
+  const accountId = req.query.accountId;
+
   const from = req.query.from;
   const size = req.query.size;
   const sortColumn = req.query.sort_column;
@@ -42,7 +45,7 @@ router.get('/', [verifyToken], (req, res) => {
 
   adserve
     .supplyTags()
-    .getMany(null, from, size, sortColumn, sortOrder)
+    .getMany(null, accountId, from, size, sortColumn, sortOrder)
     .then(data => {
       res
         .json(data ? data : {});
@@ -62,7 +65,7 @@ router.get('/:id',[verifyToken], (req, res) => {
 
   adserve
     .supplyTags()
-    .get(id)
+    .get(id, null)
     .then(data => {
       console.log(data);
       res

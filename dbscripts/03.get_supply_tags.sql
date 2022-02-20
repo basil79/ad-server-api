@@ -2,6 +2,7 @@ USE `adserve`;
 DROP PROCEDURE IF EXISTS `get_supply_tags`;
 CREATE PROCEDURE `get_supply_tags` (
     $id int(11),
+    $account_id int(11),
     $from int,
     $size int,
     $sort_column varchar(50),
@@ -18,12 +19,14 @@ BEGIN
         SQL_CALC_FOUND_ROWS
         s.id,
         s.name,
+        s.account_id,
         s.insert_date,
         s.modify_date,
         s.is_active
     FROM supply_tags s
     WHERE 1 = 1
         AND s.id = IFNULL($id, s.id)
+        AND s.account_id <=> IFNULL($account_id, s.account_id)
     ORDER BY
     CASE
         WHEN @sort_order <> 'ASC' THEN 0
@@ -32,6 +35,10 @@ BEGIN
     CASE
         WHEN @sort_order <> 'ASC' THEN ''
         WHEN @sort_column = 'name' THEN s.name
+    END ASC,
+    CASE
+        WHEN @sort_order <> 'ASC' THEN 0
+        WHEN @sort_column = 'account_id' THEN s.account_id
     END ASC,
     CASE
         WHEN @sort_order <> 'ASC' THEN CAST(NULL AS DATE)
@@ -52,6 +59,10 @@ BEGIN
     CASE
         WHEN @sort_order <> 'DESC' THEN ''
         WHEN @sort_column = 'name' THEN s.name
+    END DESC,
+    CASE
+        WHEN @sort_order <> 'DESC' THEN 0
+        WHEN @sort_column = 'account_id' THEN s.account_id
     END DESC,
     CASE
         WHEN @sort_order <> 'DESC' THEN CAST(NULL AS DATE)
