@@ -2,6 +2,7 @@ class DemandTag {
   constructor(json) {
     this.id = json.id;
     this.name = json.name;
+    this.accountId = json.account_id;
     this.supplyTagId = json.supply_tag_id;
     this.vastUrl = json.vast_url;
     this.bidder = json.bidder;
@@ -21,6 +22,9 @@ class DemandTag {
   }
   getName() {
     return this.name;
+  }
+  getAccountId() {
+    return this.accountId;
   }
   getSupplyTagId() {
     return this.supplyTagId;

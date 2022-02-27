@@ -2,6 +2,7 @@ USE `adserve`;
 DROP PROCEDURE IF EXISTS `get_demand_tags`;
 CREATE PROCEDURE `get_demand_tags` (
     $id int(11),
+    $account_id int(11),
     $supply_tag_id int(11),
     $from int,
     $size int,
@@ -19,6 +20,7 @@ BEGIN
         SQL_CALC_FOUND_ROWS
         d.id,
         d.name,
+        d.account_id,
         d.supply_tag_id,
         d.vast_url,
         d.tier,
@@ -32,6 +34,7 @@ BEGIN
     FROM demand_tags d
     WHERE 1 = 1
         AND d.id = IFNULL($id, d.id)
+        AND d.account_id <=> IFNULL($account_id, d.account_id)
         AND d.supply_tag_id <=> IFNULL($supply_tag_id, d.supply_tag_id)
     ORDER BY
     CASE
@@ -41,6 +44,10 @@ BEGIN
     CASE
         WHEN @sort_order <> 'ASC' THEN ''
         WHEN @sort_column = 'name' THEN d.name
+    END ASC,
+    CASE
+        WHEN @sort_order <> 'ASC' THEN 0
+        WHEN @sort_column = 'account_id' THEN d.account_id
     END ASC,
     CASE
         WHEN @sort_order <> 'ASC' THEN 0
@@ -77,6 +84,10 @@ BEGIN
     CASE
         WHEN @sort_order <> 'DESC' THEN ''
         WHEN @sort_column = 'name' THEN d.name
+    END DESC,
+    CASE
+        WHEN @sort_order <> 'DESC' THEN 0
+        WHEN @sort_column = 'account_id' THEN d.account_id
     END DESC,
     CASE
         WHEN @sort_order <> 'DESC' THEN 0

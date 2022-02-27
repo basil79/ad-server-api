@@ -8,6 +8,7 @@ class DemandTags extends JDBCRepository {
     this.elasticClient = elasticClient;
 
     this.ID = '$id';
+    this.ACCOUNT_ID = '$account_id';
     this.NAME = '$name';
     this.SUPPLY_TAG_ID = '$supply_tag_id';
     this.VAST_URL = '$vast_url';
@@ -26,10 +27,11 @@ class DemandTags extends JDBCRepository {
     this.SORT_ORDER = '$sort_order';
 
   }
-  get(id, supplyTagId) {
+  get(id, accountId, supplyTagId) {
     return new Promise((res, rej) => {
       this.procedureQuery('get_demand_tags', [
         new SqlParam(this.ID, id),
+        new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.SUPPLY_TAG_ID, supplyTagId),
         new SqlParam(this.FROM, null),
         new SqlParam(this.SIZE, null),
@@ -48,10 +50,11 @@ class DemandTags extends JDBCRepository {
       });
     });
   }
-  getMany(id, supplyTagId, from, size, sortColumn, sortOrder) {
+  getMany(id, accountId, supplyTagId, from, size, sortColumn, sortOrder) {
     return new Promise((res, rej) => {
       this.procedureQuery('get_demand_tags', [
         new SqlParam(this.ID, id),
+        new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.SUPPLY_TAG_ID, supplyTagId),
         new SqlParam(this.FROM, from),
         new SqlParam(this.SIZE, size),
@@ -70,11 +73,12 @@ class DemandTags extends JDBCRepository {
       });
     });
   }
-  set(id, name, supplyTagId, vastUrl, tier, priority, cpm, floor, timeout, isActive) {
+  set(id, name, accountId, supplyTagId, vastUrl, tier, priority, cpm, floor, timeout, isActive) {
     return new Promise((res, rej) => {
       this.procedureQuery('set_demand_tag', [
         new SqlParam(this.ID, id),
         new SqlParam(this.NAME, name),
+        new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.SUPPLY_TAG_ID, supplyTagId),
         new SqlParam(this.VAST_URL, vastUrl),
         //new SqlParam(this.BIDDER, bidder), // TODO:
