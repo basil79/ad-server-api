@@ -1,5 +1,8 @@
 USE `adserve`;
 DROP PROCEDURE IF EXISTS `delete_account`;
+
+DELIMITER //
+
 CREATE PROCEDURE `delete_account` (
     $id int(11)
 )
@@ -8,4 +11,6 @@ BEGIN
     SET @id := $id;
     DELETE FROM accounts WHERE id = $id;
     SELECT @id as id;
-END;
+END //
+
+DELIMITER ;

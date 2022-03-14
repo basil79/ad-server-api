@@ -1,5 +1,8 @@
 USE `adserve`;
 DROP PROCEDURE IF EXISTS `get_users`;
+
+DELIMITER //
+
 CREATE PROCEDURE `get_users` (
     $id int(11),
     $username varchar(255),
@@ -93,4 +96,6 @@ BEGIN
   SET @row_num = FOUND_ROWS();
   SELECT @row_num;
 
-END;
+END //
+
+DELIMITER ;

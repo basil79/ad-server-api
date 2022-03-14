@@ -1,5 +1,8 @@
 USE `adserve`;
 DROP PROCEDURE IF EXISTS `get_demand_tags`;
+
+DELIMITER //
+
 CREATE PROCEDURE `get_demand_tags` (
     $id int(11),
     $supply_tag_id int(11),
@@ -110,4 +113,6 @@ BEGIN
   SET @row_num = FOUND_ROWS();
   SELECT @row_num;
 
-END;
+END //
+
+DELIMITER ;

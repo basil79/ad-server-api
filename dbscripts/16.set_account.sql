@@ -1,5 +1,8 @@
 USE `adserve`;
 DROP PROCEDURE IF EXISTS `set_account`;
+
+DELIMITER //
+
 CREATE PROCEDURE `set_account` (
     $id int(11),
     $name varchar(255),
@@ -37,4 +40,6 @@ BEGIN
     END IF;
     SELECT $id as id;
         COMMIT;
-END;
+END //
+
+DELIMITER ;

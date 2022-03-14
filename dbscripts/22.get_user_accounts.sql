@@ -1,5 +1,8 @@
 USE `adserve`;
 DROP PROCEDURE IF EXISTS `get_user_accounts`;
+
+DELIMITER //
+
 CREATE PROCEDURE `get_user_accounts` (
     $user_id int(11),
     $from int,
@@ -62,4 +65,6 @@ BEGIN
   SET @row_num = FOUND_ROWS();
   SELECT @row_num;
 
-END;
+END //
+
+DELIMITER ;

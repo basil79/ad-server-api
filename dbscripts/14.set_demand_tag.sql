@@ -1,5 +1,8 @@
 USE `adserve`;
 DROP PROCEDURE IF EXISTS `set_demand_tag`;
+
+DELIMITER //
+
 CREATE PROCEDURE `set_demand_tag` (
     $id int(11),
     $name varchar(255),
@@ -65,4 +68,6 @@ BEGIN
     END IF;
     SELECT $id as id;
         COMMIT;
-END;
+END //
+
+DELIMITER ;
