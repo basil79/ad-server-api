@@ -210,7 +210,10 @@ router.post('/2fa/generate', (req, res) => {
 
       // Display this data URL to the user in an <img> tag
       // Example:
-      res.end('<img src="' + data_url + '">');
+      // res.end('<img src="' + data_url + '">');
+      res.json({
+        qr: data_url
+      });
     });
   } else {
     res.json({
