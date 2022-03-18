@@ -7,6 +7,8 @@ const Users = require('../services/users');
 const DemandTags = require('../services/demand-tags');
 const Accounts = require('../services/accounts');
 const UserAccounts = require('../services/user-accounts');
+const SupplyAccounts = require('../services/supply-accounts');
+const Sites = require('../services/sites');
 
 class AdServe {
   constructor(config) {
@@ -18,6 +20,8 @@ class AdServe {
     this.usersService = new Users(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)));
     this.accountsService = new Accounts(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)));
     this.userAccountsService = new UserAccounts(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)));
+    this.supplyAccountsService = new SupplyAccounts(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)), this.elasticClient);
+    this.sitesService = new Sites(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)), this.elasticClient);
     this.supplyTagsService = new SupplyTags(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)), this.elasticClient);
     this.demandTagsService = new DemandTags(this.jdbcClient.createShared(this.getJDBCClientConfig(this.config)), this.elasticClient);
   }
@@ -29,6 +33,12 @@ class AdServe {
   }
   userAccounts() {
     return this.userAccountsService;
+  }
+  supplyAccounts() {
+    return this.supplyAccountsService;
+  }
+  sites() {
+    return this.sitesService;
   }
   supplyTags() {
     return this.supplyTagsService;

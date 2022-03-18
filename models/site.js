@@ -1,9 +1,10 @@
-class SupplyTag {
+class Site {
   constructor(json) {
     this.id = json.id;
     this.name = json.name;
+    this.domain = json.domain;
+    this.supplyTagCount = json.supply_tag_count;
     this.supplyAccountId = json.supply_account_id;
-    this.siteId = json.site_id;
     this.accountId = json.account_id;
     this.insertDate = json.insert_date;
     this.modifyDate = json.modify_date;
@@ -15,11 +16,14 @@ class SupplyTag {
   getName() {
     return this.name;
   }
+  getDomain() {
+    return this.domain;
+  }
+  getSupplyTagCount() {
+    return this.supplyTagCount;
+  }
   getSupplyAccountId() {
     return this.supplyAccountId;
-  }
-  getSiteId() {
-    return this.siteId;
   }
   getAccountId() {
     return this.accountId;
@@ -35,4 +39,4 @@ class SupplyTag {
   }
 }
 
-module.exports = SupplyTag;
+module.exports = Site;
