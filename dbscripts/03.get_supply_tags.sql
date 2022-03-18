@@ -5,6 +5,8 @@ DELIMITER //
 
 CREATE PROCEDURE `get_supply_tags` (
     $id int(11),
+    $supply_account_id int(11),
+    $site_id int(11),
     $account_id int(11),
     $from int,
     $size int,
@@ -22,6 +24,8 @@ BEGIN
         SQL_CALC_FOUND_ROWS
         s.id,
         s.name,
+        s.supply_account_id,
+        s.site_id,
         s.account_id,
         s.insert_date,
         s.modify_date,
@@ -29,6 +33,8 @@ BEGIN
     FROM supply_tags s
     WHERE 1 = 1
         AND s.id = IFNULL($id, s.id)
+        AND s.supply_account_id <=> IFNULL($supply_account_id, s.supply_account_id)
+        AND s.site_id <=> IFNULL($site_id, s.site_id)
         AND s.account_id <=> IFNULL($account_id, s.account_id)
     ORDER BY
     CASE
@@ -38,6 +44,14 @@ BEGIN
     CASE
         WHEN @sort_order <> 'ASC' THEN ''
         WHEN @sort_column = 'name' THEN s.name
+    END ASC,
+    CASE
+        WHEN @sort_order <> 'ASC' THEN 0
+        WHEN @sort_column = 'supply_account_id' THEN s.supply_account_id
+    END ASC,
+    CASE
+        WHEN @sort_order <> 'ASC' THEN 0
+        WHEN @sort_column = 'site_id' THEN s.site_id
     END ASC,
     CASE
         WHEN @sort_order <> 'ASC' THEN 0
@@ -62,6 +76,14 @@ BEGIN
     CASE
         WHEN @sort_order <> 'DESC' THEN ''
         WHEN @sort_column = 'name' THEN s.name
+    END DESC,
+    CASE
+        WHEN @sort_order <> 'DESC' THEN 0
+        WHEN @sort_column = 'supply_account_id' THEN s.supply_account_id
+    END DESC,
+    CASE
+        WHEN @sort_order <> 'DESC' THEN 0
+        WHEN @sort_column = 'site_id' THEN s.site_id
     END DESC,
     CASE
         WHEN @sort_order <> 'DESC' THEN 0

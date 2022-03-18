@@ -1,9 +1,8 @@
-class SupplyTag {
+class SupplyAccount {
   constructor(json) {
     this.id = json.id;
     this.name = json.name;
-    this.supplyAccountId = json.supply_account_id;
-    this.siteId = json.site_id;
+    this.siteCount = json.site_count;
     this.accountId = json.account_id;
     this.insertDate = json.insert_date;
     this.modifyDate = json.modify_date;
@@ -15,11 +14,8 @@ class SupplyTag {
   getName() {
     return this.name;
   }
-  getSupplyAccountId() {
-    return this.supplyAccountId;
-  }
-  getSiteId() {
-    return this.siteId;
+  getSiteCount() {
+    return this.siteCount;
   }
   getAccountId() {
     return this.accountId;
@@ -35,4 +31,4 @@ class SupplyTag {
   }
 }
 
-module.exports = SupplyTag;
+module.exports = SupplyAccount;

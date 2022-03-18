@@ -6,6 +6,8 @@ const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
 const accountsRouter = require('./routes/accounts');
 const userAccountsRouter = require('./routes/user-accounts');
+const supplyAccountsRouter = require('./routes/supply-accounts');
+const sitesRouter = require('./routes/sites');
 const supplyTagsRouter = require('./routes/supply-tags');
 const demandTagsRouter = require('./routes/demand-tags');
 
@@ -40,8 +42,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   res.header(
-    "Access-Control-Allow-Headers",
-    "x-access-token, Origin, Content-Type, Accept"
+    'Access-Control-Allow-Headers',
+    'x-access-token, Origin, Content-Type, Accept'
   );
   next();
 });
@@ -49,6 +51,8 @@ app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use('/accounts', accountsRouter);
 app.use('/user-accounts', userAccountsRouter);
+app.use('/supply-accounts', supplyAccountsRouter);
+app.use('/sites', sitesRouter);
 app.use('/supply-tags', supplyTagsRouter);
 app.use('/demand-tags', demandTagsRouter);
 
