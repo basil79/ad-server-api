@@ -7,7 +7,9 @@ router.post('/', [verifyToken], (req, res) => {
 
   const id = req.body.id;
   const name = req.body.name;
-  const supplyTagId = req.body.supplyTagId;
+  const demandAccountId = req.body.demandAccountId;
+  const advertiserId = req.body.advertiserId;
+  const accountId = req.body.accountId;
   const vastUrl = req.body.vastUrl;
   const tier = req.body.tier;
   const priority = req.body.priority;
@@ -18,7 +20,7 @@ router.post('/', [verifyToken], (req, res) => {
 
   adserve
     .demandTags()
-    .set(id, name, supplyTagId, vastUrl, tier, priority, cpm, floor, timeout, isActive)
+    .set(id, name, demandAccountId, advertiserId, accountId, vastUrl, tier, priority, cpm, floor, timeout, isActive)
     .then(data => {
       if(data) {
         res.json({
@@ -41,7 +43,10 @@ router.post('/', [verifyToken], (req, res) => {
 
 router.get('/', [verifyToken], (req, res) => {
 
-  const supplyTagId = req.query.supply_tag_id;
+  const demandAccountId = req.query.demand_account_id;
+  const advertiserId = req.query.advertiser_id;
+  const accountId = req.query.account_id;
+
   const from = req.query.from;
   const size = req.query.size;
   const sortColumn = req.query.sort_column;
@@ -49,7 +54,7 @@ router.get('/', [verifyToken], (req, res) => {
 
   adserve
     .demandTags()
-    .getMany(null, supplyTagId, from, size, sortColumn, sortOrder)
+    .getMany(null, demandAccountId, advertiserId, accountId, from, size, sortColumn, sortOrder)
     .then(data => {
       res
         .json(data ? data : {});
@@ -68,7 +73,7 @@ router.get('/:id', [verifyToken], (req, res) => {
 
   adserve
     .demandTags()
-    .get(id)
+    .get(id, null, null)
     .then(data => {
       console.log(data);
       res

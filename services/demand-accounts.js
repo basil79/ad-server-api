@@ -1,39 +1,25 @@
-const {JDBCRepository, SqlParam} = require('../models/jdbc');
-const DemandTag = require('../models/demand-tag');
-const DemandTagsResult = require('../models/demand-tags-result');
+const { JDBCRepository, SqlParam } = require('../models/jdbc');
+const DemandAccount = require('../models/demand-account');
+const DemandAccountsResult = require('../models/demand-accounts-result');
 
-class DemandTags extends JDBCRepository {
+class DemandAccounts extends JDBCRepository {
   constructor(jdbcClient, elasticClient) {
     super(jdbcClient);
     this.elasticClient = elasticClient;
 
     this.ID = '$id';
     this.NAME = '$name';
-    this.DEMAND_ACCOUNT_ID = '$demand_account_id';
-    this.ADVERTISER_ID = '$advertiser_id';
     this.ACCOUNT_ID = '$account_id';
-    this.VAST_URL = '$vast_url';
-    this.BIDDER = '$bidder';
-    this.TIER = '$tier';
-    this.PRIORITY = '$priority';
-    this.CPM = '$cpm';
-    this.FLOOR = '$floor';
-    this.FREQUENCY = '$frequency';
-    this.TRACKING_EVENTS = '$tracking_events';
-    this.TIMEOUT = '$timeout';
     this.IS_ACTIVE = '$is_active';
     this.FROM = '$from';
     this.SIZE = '$size';
     this.SORT_COLUMN = '$sort_column';
     this.SORT_ORDER = '$sort_order';
-
   }
-  get(id, demandAccountId, advertiserId, accountId) {
+  get(id, accountId) {
     return new Promise((res, rej) => {
-      this.procedureQuery('get_demand_tags', [
+      this.procedureQuery('get_demand_accounts', [
         new SqlParam(this.ID, id),
-        new SqlParam(this.DEMAND_ACCOUNT_ID, demandAccountId),
-        new SqlParam(this.ADVERTISER_ID, advertiserId),
         new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.FROM, null),
         new SqlParam(this.SIZE, null),
@@ -44,7 +30,7 @@ class DemandTags extends JDBCRepository {
           rej(err);
         } else {
           if(rows[0].length != 0) {
-            res(new DemandTag(rows[0][0]));
+            res(new DemandAccount(rows[0][0]));
           } else {
             res(null);
           }
@@ -52,12 +38,10 @@ class DemandTags extends JDBCRepository {
       });
     });
   }
-  getMany(id, demandAccountId, advertiserId, accountId, from, size, sortColumn, sortOrder) {
+  getMany(id, accountId, from, size, sortColumn, sortOrder) {
     return new Promise((res, rej) => {
-      this.procedureQuery('get_demand_tags', [
+      this.procedureQuery('get_demand_accounts', [
         new SqlParam(this.ID, id),
-        new SqlParam(this.DEMAND_ACCOUNT_ID, demandAccountId),
-        new SqlParam(this.ADVERTISER_ID, advertiserId),
         new SqlParam(this.ACCOUNT_ID, accountId),
         new SqlParam(this.FROM, from),
         new SqlParam(this.SIZE, size),
@@ -68,7 +52,7 @@ class DemandTags extends JDBCRepository {
           rej(err);
         } else {
           if(rows.length == 3) {
-            res(new DemandTagsResult(rows[0].map((row) => new DemandTag(row)), rows[1][0]['@row_num']));
+            res(new DemandAccountsResult(rows[0].map((row) => new DemandAccount(row)), rows[1][0]['@row_num']));
           } else {
             res(null);
           }
@@ -76,23 +60,12 @@ class DemandTags extends JDBCRepository {
       });
     });
   }
-  set(id, name, demandAccountId, advertiserId, accountId, vastUrl, tier, priority, cpm, floor, timeout, isActive) {
+  set(id, name, accountId, isActive) {
     return new Promise((res, rej) => {
-      this.procedureQuery('set_demand_tag', [
+      this.procedureQuery('set_demand_account', [
         new SqlParam(this.ID, id),
         new SqlParam(this.NAME, name),
-        new SqlParam(this.DEMAND_ACCOUNT_ID, demandAccountId),
-        new SqlParam(this.ADVERTISER_ID, advertiserId),
         new SqlParam(this.ACCOUNT_ID, accountId),
-        new SqlParam(this.VAST_URL, vastUrl),
-        //new SqlParam(this.BIDDER, bidder), // TODO:
-        new SqlParam(this.TIER, tier),
-        new SqlParam(this.PRIORITY, priority),
-        new SqlParam(this.CPM, cpm),
-        new SqlParam(this.FLOOR, floor),
-        //new SqlParam(this.FREQUENCY, frequency), // TODO:
-        //new SqlParam(this.TRACKING_EVENTS, trackingEvents), // TODO:
-        new SqlParam(this.TIMEOUT, timeout),
         new SqlParam(this.IS_ACTIVE, isActive)
       ], function(err, rows) {
         if(err) {
@@ -109,7 +82,7 @@ class DemandTags extends JDBCRepository {
   }
   delete(id) {
     return new Promise((res, rej) => {
-      this.procedureQuery('delete_demand_tag', [
+      this.procedureQuery('delete_demand_account', [
         new SqlParam(this.ID, id)
       ], function(err, rows) {
         if(err) {
@@ -126,4 +99,4 @@ class DemandTags extends JDBCRepository {
   }
 }
 
-module.exports = DemandTags;
+module.exports = DemandAccounts;
