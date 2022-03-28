@@ -9,6 +9,8 @@ const userAccountsRouter = require('./routes/user-accounts');
 const supplyAccountsRouter = require('./routes/supply-accounts');
 const sitesRouter = require('./routes/sites');
 const supplyTagsRouter = require('./routes/supply-tags');
+const demandAccountsRouter = require('./routes/demand-accounts');
+const advertisersRouter = require('./routes/advertisers');
 const demandTagsRouter = require('./routes/demand-tags');
 
 const app = express();
@@ -54,6 +56,8 @@ app.use('/user-accounts', userAccountsRouter);
 app.use('/supply-accounts', supplyAccountsRouter);
 app.use('/sites', sitesRouter);
 app.use('/supply-tags', supplyTagsRouter);
+app.use('/demand-accounts', demandAccountsRouter);
+app.use('/advertisers', advertisersRouter);
 app.use('/demand-tags', demandTagsRouter);
 
 app.listen(port, () => {

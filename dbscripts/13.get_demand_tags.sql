@@ -5,7 +5,9 @@ DELIMITER //
 
 CREATE PROCEDURE `get_demand_tags` (
     $id int(11),
-    $supply_tag_id int(11),
+    $demand_account_id int(11),
+    $advertiser_id int(11),
+    $account_id int(11),
     $from int,
     $size int,
     $sort_column varchar(50),
@@ -22,7 +24,9 @@ BEGIN
         SQL_CALC_FOUND_ROWS
         d.id,
         d.name,
-        d.supply_tag_id,
+        d.demand_account_id,
+        d.advertiser_id,
+        d.account_id,
         d.vast_url,
         d.tier,
         d.priority,
@@ -35,7 +39,9 @@ BEGIN
     FROM demand_tags d
     WHERE 1 = 1
         AND d.id = IFNULL($id, d.id)
-        AND d.supply_tag_id <=> IFNULL($supply_tag_id, d.supply_tag_id)
+        AND d.demand_account_id <=> IFNULL($demand_account_id, d.demand_account_id)
+        AND d.advertiser_id <=> IFNULL($advertiser_id, d.advertiser_id)
+        AND d.account_id <=> IFNULL($account_id, d.account_id)
     ORDER BY
     CASE
         WHEN @sort_order <> 'ASC' THEN 0
@@ -47,7 +53,15 @@ BEGIN
     END ASC,
     CASE
         WHEN @sort_order <> 'ASC' THEN 0
-        WHEN @sort_column = 'supply_tag_id' THEN d.supply_tag_id
+        WHEN @sort_column = 'demand_account_id' THEN d.demand_account_id
+    END ASC,
+    CASE
+        WHEN @sort_order <> 'ASC' THEN 0
+        WHEN @sort_column = 'advertiser_id' THEN d.advertiser_id
+    END ASC,
+    CASE
+        WHEN @sort_order <> 'ASC' THEN 0
+        WHEN @sort_column = 'account_id' THEN d.account_id
     END ASC,
     CASE
         WHEN @sort_order <> 'ASC' THEN 0
@@ -83,7 +97,15 @@ BEGIN
     END DESC,
     CASE
         WHEN @sort_order <> 'DESC' THEN 0
-        WHEN @sort_column = 'supply_tag_id' THEN d.supply_tag_id
+        WHEN @sort_column = 'demand_account_id' THEN d.demand_account_id
+    END DESC,
+    CASE
+        WHEN @sort_order <> 'DESC' THEN 0
+        WHEN @sort_column = 'advertiser_id' THEN d.advertiser_id
+    END DESC,
+    CASE
+        WHEN @sort_order <> 'DESC' THEN 0
+        WHEN @sort_column = 'account_id' THEN d.account_id
     END DESC,
     CASE
         WHEN @sort_order <> 'DESC' THEN 0

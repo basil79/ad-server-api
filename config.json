@@ -1,8 +1,8 @@
 {
   "jdbc" : {
     "host" : "localhost",
-    "user" : "test",
-    "password" : "1qaz2wsx",
+    "user" : "root",
+    "password" : "glb21aas",
     "database" : "adserve",
     "multipleStatements" : true
   },

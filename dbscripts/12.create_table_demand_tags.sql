@@ -3,7 +3,9 @@ DROP TABLE IF EXISTS `demand_tags`;
 CREATE TABLE `demand_tags` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL,
-    `supply_tag_id` int(11) DEFAULT NULL,
+    `demand_account_id` int(11) DEFAULT NULL,
+    `advertiser_id` int(11) DEFAULT NULL,
+    `account_id` int(11) NOT NULL,
     `vast_url` text DEFAULT NULL,
     `tier` int(3) DEFAULT NULL,
     `priority` int(3) DEFAULT NULL,

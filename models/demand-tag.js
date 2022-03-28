@@ -2,7 +2,9 @@ class DemandTag {
   constructor(json) {
     this.id = json.id;
     this.name = json.name;
-    this.supplyTagId = json.supply_tag_id;
+    this.demandAccountId = json.demand_account_id;
+    this.advertiserId = json.advertiser_id;
+    this.accountId = json.account_id;
     this.vastUrl = json.vast_url;
     this.bidder = json.bidder;
     this.tier = json.tier;
@@ -22,8 +24,14 @@ class DemandTag {
   getName() {
     return this.name;
   }
-  getSupplyTagId() {
-    return this.supplyTagId;
+  getDemandAccountId() {
+    return this.demandAccountId;
+  }
+  getAdvertiserId() {
+    return this.advertiserId;
+  }
+  getAccountId() {
+    return this.accountId;
   }
   getVastUrl() {
     return this.vastUrl;
